@@ -11,14 +11,10 @@ str(data)
 clean_data <- data[which(!data$d18O=="NA"),]
 clean_data
 
-# Export data
-write.table(clean_data, file = "data/dO18Results.txt", col.names = TRUE, row.names = FALSE, sep = "\t")
-
 # Run linear regression
 model <- lm(d18O ~ Year_Avg, data = clean_data)
 model
 summary(model)
-
 
 # Plot
 quartz()
@@ -27,41 +23,6 @@ plot(d18O ~ Year_Avg, data = clean_data, type = "b", xlab = "Year",
 title(ylab=expression("δ"^18 *"O (‰V-PDB)"), line=2.5)
 abline(model)
 
-## 
-
-
-#############################################
-
-# CSST Data
-
-# Read in data
-CSST <- read.csv("data/Leigh_Marine_Station_Annual_Mean_Temperature.csv")
-
-# Remove years with NAs
-clean_CSST <- CSST[which(CSST$Temperature..C!="NA"),]
-
-# Perform linear regression
-modelCSST <- lm(Temperature..C ~ Year, data = clean_CSST)
-modelCSST
-summary(modelCSST)
-
-# Plot
-plot(Temperature..C ~ Year, data = clean_CSST, type = "b", xlab = "Year", 
-     ylab = "Temperature", xlim = c(1965, 2020))
-abline(modelCSST)
-
-################################
-# Constrain 1972 - 2017
-conCSST <- clean_CSST[5:44,]
-
-# Perform linear regression
-modconCSST <- lm(Temperature..C ~ Year, data = conCSST)
-summary(modconCSST)
-
-# Plot
-plot(Temperature..C ~ Year, data = conCSST, type = "b", xlab = "Year", 
-     ylab = "Average Annual Temperature", xlim = c(1970, 2020))
-abline(modconCSST)
 
 ################################
 
@@ -106,3 +67,36 @@ summary(linMod)
 plot(df, type = "b", xlab = "Year", ylab = "Average Annual Temperature")
 plot(SST_degC ~ year, data = conModeled, xlab = "Year", ylab = "Average Annual Temperature")
 abline(linMod)
+
+#############################################
+
+# CSST Data
+
+# Read in data
+CSST <- read.csv("data/Leigh_Marine_Station_Annual_Mean_Temperature.csv")
+
+# Remove years with NAs
+clean_CSST <- CSST[which(CSST$Temperature..C!="NA"),]
+
+# Perform linear regression
+modelCSST <- lm(Temperature..C ~ Year, data = clean_CSST)
+modelCSST
+summary(modelCSST)
+
+# Plot
+plot(Temperature..C ~ Year, data = clean_CSST, type = "b", xlab = "Year", 
+     ylab = "Temperature", xlim = c(1965, 2020))
+abline(modelCSST)
+
+
+# Constrain 1972 - 2017
+conCSST <- clean_CSST[5:44,]
+
+# Perform linear regression
+modconCSST <- lm(Temperature..C ~ Year, data = conCSST)
+summary(modconCSST)
+
+# Plot
+plot(Temperature..C ~ Year, data = conCSST, type = "b", xlab = "Year", 
+     ylab = "Average Annual Temperature", xlim = c(1970, 2020))
+abline(modconCSST)
